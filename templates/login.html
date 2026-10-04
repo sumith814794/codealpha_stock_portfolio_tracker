@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Stock Portfolio</title>
+  <link rel="stylesheet" href="/static/login.css">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Animated background shapes -->
+  <div class="background">
+    <div class="shape shape-1"></div>
+    <div class="shape shape-2"></div>
+    <div class="shape shape-3"></div>
+  </div>
+
+  <div class="login-container">
+    <!-- Left Side: Graphic & Text -->
+    <div class="login-left">
+      <h2>Welcome Back</h2>
+      <p>Track your stocks, analyze market trends, and grow your portfolio intelligently.</p>
+      <div class="chart-animation">
+        <div class="bar bar-1"></div>
+        <div class="bar bar-2"></div>
+        <div class="bar bar-3"></div>
+        <div class="bar bar-4"></div>
+        <div class="bar bar-5"></div>
+      </div>
+    </div>
+    
+    <!-- Right Side: Login Form -->
+    <div class="login-right">
+      <div class="login-box">
+        <h1>Sign In</h1>
+        <form method="POST">
+          <div class="input-group">
+            <input type="text" name="username" required>
+            <label>Username</label>
+          </div>
+          <div class="input-group">
+            <input type="password" name="password" required>
+            <label>Password</label>
+          </div>
+          <button type="submit">Access Portfolio</button>
+        </form>
+        {% if error %}
+          <div class="error">
+            ⚠️ {{ error }}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</body>
+</html>

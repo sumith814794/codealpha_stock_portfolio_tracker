@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <link rel="stylesheet" href="/static/style.css">
+
+<head>
+  <meta charset="UTF-8">
+  <title>📊 Stock Watchlist Tracker</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Stock Watchlist Tracker</h1>
+    <form method="POST">
+      <input type="text" name="stock" placeholder="Enter Stock Symbol (e.g., AAPL)" required>
+      <button type="submit">Add to Watchlist</button>
+    </form>
+
+    {% if stocks %}
+      <h2>Watchlist</h2>
+      <table>
+        <tr>
+          <th>Symbol</th>
+          <th>Current Price</th>
+          <th>Day Change</th>
+          <th>Market Cap</th>
+          <th>Sector</th>
+        </tr>
+        {% for s in stocks %}
+        <tr>
+          <td>{{ s.symbol }}</td>
+          <td>${{ s.current_price }}</td>
+          <td>
+            {% if s.day_change >= 0 %}
+              <span style="color:lightgreen;">+{{ "%.2f"|format(s.day_change) }}%</span>
+            {% else %}
+              <span style="color:red;">{{ "%.2f"|format(s.day_change) }}%</span>
+            {% endif %}
+          </td>
+          <td>${{ "{:,}".format(s.market_cap) }}</td>
+          <td>{{ s.sector }}</td>
+        </tr>
+        {% endfor %}
+      </table>
+
+      <!-- Export Button -->
+      <p><a href="/export"><button type="button">Export to CSV</button></a></p>
+
+      <!-- Pie chart by sector -->
+      <div id="sectorChart" style="width:100%;max-width:600px;height:400px;margin:auto;"></div>
+      <script>
+        var data = [{
+          type: 'pie',
+          labels: {{ stocks | map(attribute='sector') | list | safe }},
+          values: {{ stocks | map(attribute='market_cap') | list | safe }},
+          textinfo: "label+percent",
+          hole: 0.4
+        }];
+
+        var layout = {
+          paper_bgcolor: 'rgba(0,0,0,0)',   // transparent background
+          plot_bgcolor: 'rgba(0,0,0,0)',    // transparent plot area
+          font: { color: 'white', size: 14 } // match your UI theme
+        };
+
+        Plotly.newPlot('sectorChart', data, layout, {displayModeBar: false});
+
+        // Auto-refresh every 60 seconds
+        setInterval(function(){
+          window.location.reload();
+        }, 60000);
+      </script>
+    {% endif %}
+  </div>
+</body>
+</html>
